@@ -24,15 +24,22 @@ yargs.command({
 yargs.command({
     command: 'remove',
     describe: chalk.red('Remove a note'),
-    handler: function () {
-        console.log(chalk.red('Removed the note.'));
+    builder: {
+        title: {
+            describe: chalk.red('Note title'),
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: function (argv) {
+        notes.removeNote(argv.title)
     }
 })
 yargs.command({
     command: 'list',
     describe: chalk.magenta('List notes'),
     handler: function () {
-        console.log(chalk.magenta('List notes'));
+        notes.getNotes();
     }
 })
 yargs.command({

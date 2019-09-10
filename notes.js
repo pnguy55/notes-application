@@ -2,7 +2,17 @@ let fs = require('fs')
 let chalk = require('chalk')
 
 let getNotes = function (){
-    return 'Your notes...';
+    let notes = loadNotes()
+    let noteNumber = 0
+    console.log(chalk.bgWhite.white('--------------------------------------'))
+
+    notes.forEach(function(note) {
+        noteNumber++
+        console.log(chalk.bgWhite.black(' NOTE ' + noteNumber + ' '))
+        console.log(chalk.green(note.title))
+        console.log(chalk.green(note.body))
+        console.log(chalk.bgWhite.white('--------------------------------------'))
+    })
 }
 
 const addNote = function (title, body){
@@ -31,8 +41,25 @@ const addNote = function (title, body){
         
         console.log(chalk.bgRed('Note title taken'))
     }
-    
-    
+}
+
+const removeNote = function (title){
+    let notes = loadNotes()
+    let initialLength = notes.length
+    let filteredNotes = notes.filter(function (note) {
+        return note.title != title
+    })
+    let filteredLength = filteredNotes.length
+
+    saveNotes(filteredNotes)
+
+    if (initialLength === 0) {
+        console.log(chalk.bgRed('There is no note to remove'))
+    } else if (initialLength === filteredLength) {
+        console.log(chalk.bgRed('The note you requested to remove does not exist'))
+    } else {
+        console.log(chalk.bgRed('Your note was successfully removed'))
+    }
 }
 
 const saveNotes = function (notes){
@@ -55,5 +82,6 @@ const loadNotes = function () {
 
 module.exports = {
     getNotes: getNotes, 
-    addNote: addNote
+    addNote: addNote,
+    removeNote: removeNote
 }
