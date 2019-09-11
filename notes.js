@@ -1,27 +1,25 @@
 let fs = require('fs')
 let chalk = require('chalk')
 
-let getNotes = function (){
+let getNotes = () => {
     let notes = loadNotes()
     let noteNumber = 0
-    console.log(chalk.bgWhite.white('--------------------------------------'))
+    console.log('\n')
 
-    notes.forEach(function(note) {
+    notes.forEach((note) => {
         noteNumber++
         console.log(chalk.bgWhite.black(' NOTE ' + noteNumber + ' '))
-        console.log(chalk.green(note.title))
-        console.log(chalk.green(note.body))
-        console.log(chalk.bgWhite.white('--------------------------------------'))
+        console.log(chalk.bgWhite.black(' ' + note.title + ' '))
+        console.log(chalk.bgWhite.black(' ' + note.body + ' '))
+        console.log('\n')
     })
 }
 
-const addNote = function (title, body){
+const addNote = (title, body) => {
     let notes = loadNotes()
-    let duplicateNotes = notes.filter(function (note){
-        return note.title === title
-    })
+    let duplicateNotes = notes.find((note) => note.title === title)
 
-    if (duplicateNotes.length === 0) {
+    if (!duplicateNotes) {
         notes.push({
             title: title,
             body: body
@@ -43,12 +41,10 @@ const addNote = function (title, body){
     }
 }
 
-const removeNote = function (title){
+const removeNote = (title) => {
     let notes = loadNotes()
     let initialLength = notes.length
-    let filteredNotes = notes.filter(function (note) {
-        return note.title != title
-    })
+    let filteredNotes = notes.filter((note) => note.title != title)
     let filteredLength = filteredNotes.length
 
     saveNotes(filteredNotes)
@@ -62,12 +58,31 @@ const removeNote = function (title){
     }
 }
 
-const saveNotes = function (notes){
+const readNote = (title) => {
+    let notes = loadNotes()
+    let noteNumber = 0
+    let foundNote = notes.find((note) => {
+        noteNumber++
+        return note.title === title
+    })
+
+    if(!foundNote){
+        console.log(foundNote)
+    } else {
+        console.log('\n')
+        console.log(chalk.bgWhite.black(' NOTE ' + noteNumber + ' ' ))
+        console.log(chalk.bgWhite.black(' ' + foundNote.title + ' '))
+        console.log(chalk.bgWhite.black(' ' + foundNote.body + ' '))
+        console.log('\n')
+    }
+}
+
+const saveNotes = (notes) => {
     let noteString = JSON.stringify(notes) 
     fs.writeFileSync('notes.json', noteString)
 }
 
-const loadNotes = function () {
+const loadNotes = () => {
     try{
         let noteBuffer = fs.readFileSync('notes.json')
         let noteString = noteBuffer.toString()
@@ -75,13 +90,11 @@ const loadNotes = function () {
     } catch (e) {
         return []
     }
-    
-
-
 }
 
 module.exports = {
     getNotes: getNotes, 
     addNote: addNote,
-    removeNote: removeNote
+    removeNote: removeNote,
+    readNote: readNote
 }
