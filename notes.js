@@ -60,7 +60,7 @@ const removeNote = (title) => {
 
 const readNote = (title) => {
     let notes = loadNotes()
-    let noteNumber = 0
+    let noteNumbers = 0
     let foundNote = notes.find((note) => {
         noteNumber++
         return note.title === title
@@ -70,7 +70,7 @@ const readNote = (title) => {
         console.log(foundNote)
     } else {
         console.log('\n')
-        console.log(chalk.bgWhite.black(' NOTE ' + noteNumber + ' ' ))
+        console.log(chalk.bgWhite.black(' NOTE ' + noteNumbers + ' ' ))
         console.log(chalk.bgWhite.black(' ' + foundNote.title + ' '))
         console.log(chalk.bgWhite.black(' ' + foundNote.body + ' '))
         console.log('\n')
